@@ -48,7 +48,6 @@ BTree.prototype.insert = function(value, silent) {
   target.insert(value);
 
 }
-
 BTree.prototype.addUnattached = function(node, level) {
   this.unattached_nodes[level] = this.unattached_nodes[level] || [];
 
@@ -74,6 +73,7 @@ BTree.prototype.removeUnattached = function(node, level) {
 // Generate tree json for d3.js to consume
 BTree.prototype.toJSON = function() {
   root = this.root;
+  console.log(root.toJSON())
   return root.toJSON();
 }
 

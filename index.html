@@ -13,15 +13,13 @@
 
 <body id="main">
 
-  <a href="https://github.com/yangez/btree-js"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
-
   <div id="inputs">
     <h1>B-Tree <span class="label label-info reset-btree">Order <span id="order-display"></span></span></h1>
 
     <form action="#" id="create-form" class="form-inline">
       <p>
         Create B-tree of order
-        <input type="text" class="form-control" value="3" id="new-order"/><br/>
+        <input type="text" class="form-control" value="5" id="new-order"/><br/>
         and seed it with
         <input type="text" class="form-control" value="5" id="new-seed"/>
         random numbers.
@@ -43,28 +41,6 @@
 
 <div id="canvas"></div>
 
-<a href="#" id="what-is-this" class="note">What is this?</a>
-<a href="#" id="close-this" class="note">Close</a>
-
-<div id="popup">
-  <p>A <strong>B-tree</strong> is a data structure that consists of ordered nodes arranged in a balanced tree. Each node contains <em>keys</em> (the numbers that you see) and <em>children</em> (the nodes directly below it).</p>
-
-  <p>Nodes are sorted to the left, middle, or right depending on whether their keys are less than, in between, or greater than the parent's keys. Add some values to the demo for a visual demonstration of this.</p>
-
-  <p>The <em>root</em> is the top node, <em>internal</em> nodes are in the middle, and <em>leaf</em> nodes are on the bottom. Using this terminology, a valid B-tree of order <em>m</em> obeys the following rules:</p>
-
-  <ul>
-    <li>Every node has at most <em>m</em> children.</li>
-    <li>Every internal node has at least <em>ceil( m / 2 )</em> children.</li>
-    <li>The root node has at least 2 children if it's not a leaf.</li>
-    <li>A non-leaf node with <em>k</em> children contains <em>k-1</em> keys.</li>
-    <li>All leaves are on the same level.</li>
-  </ul>
-
-  <p>B-trees allow you to quickly search for values, and they're often used in databases and file systems.</p>
-
-</div>
-
 </body>
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -72,15 +48,4 @@
 <script type="text/javascript" src="assets/js/btree.js"></script>
 <script type="text/javascript" src="assets/js/btree-node.js"></script>
 <script type="text/javascript" src="assets/js/script.js"></script>
-<script type="text/javascript" src="assets/js/debugging.js"></script>
-<script>
-  // google analytics
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-4892895-7', 'auto');
-  ga('send', 'pageview');
-</script>
 </html>

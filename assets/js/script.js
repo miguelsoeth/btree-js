@@ -18,8 +18,8 @@ $(function() {
   var bTree, treeData;
 
   // automatically create btree with default settings
-  bTree = BTree(3);
-  $("#order-display").html(3);
+  bTree = BTree(5);
+  $("#order-display").html(5);
   bTree.seed(5);
   var treeData = bTree.toJSON();
   update(treeData);
@@ -46,8 +46,6 @@ $(function() {
       });
     });
 
-    ga('send', 'event', 'tree', 'generated');
-
   });
 
   // reset tree event handler
@@ -60,8 +58,6 @@ $(function() {
     $("#add-form").fadeOut(200, function(){
       $("#create-form").fadeIn(200);
     });
-
-    ga('send', 'event', 'tree', 'reset');
 
   });
 
@@ -94,27 +90,7 @@ $(function() {
       d3NodeTouched.select('circle').style({stroke : '#ff0000', fill: '#ffcccc'});
     });
 
-    ga('send', 'event', 'tree', 'inserted value');
-
   });
-
-  // Note event handler
-  $("#close-this").click(function(e) {
-    e.preventDefault();
-    $("#popup").css("bottom", -350);
-    $("#close-this").hide();
-    $("#what-is-this").show();
-  });
-  $("#what-is-this").click(function(e) {
-    e.preventDefault();
-    $("#popup").css("bottom", 0);
-    $("#close-this").show();
-    $("#what-is-this").hide();
-    ga('send', 'event', 'info', 'viewed');
-  });
-
-  // open up info section upon page load
-  $("#what-is-this").click();
 
   // color paths down to newly added node
   function colorPath(node) {
