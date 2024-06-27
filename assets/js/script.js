@@ -20,9 +20,6 @@ $(function() {
   // automatically create btree with default settings
   bTree = BTree(5);
   $("#order-display").html(5);
-  bTree.seed(5);
-  var treeData = bTree.toJSON();
-  update(treeData);
 
   // create form event handler
   $("#create-form").submit(function(event) {
@@ -65,7 +62,7 @@ $(function() {
   $("#add-form").submit(function(event) {
     event.preventDefault();
     var value = parseInt( $("#input-add").val() );
-    bTree.insert(value, true); // silently insert
+    bTree.insert(value, false); // silently insert
 
     $("#input-add").val("");
 
