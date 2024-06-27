@@ -55,7 +55,7 @@ $(function() {
   $("#add-form").submit(function(event) {
     event.preventDefault();
     var value = parseInt( $("#input-add").val() );
-    if (!value) {
+    if (!value || value <= 0) {
       alert("Entrada inválida!");
       return
     }
