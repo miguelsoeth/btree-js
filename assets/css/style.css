@@ -1,71 +1,55 @@
-body, html {
+body,
+html {
   font-size: 16px;
   line-height: 1.5em;
-  width: 100%; }
+  width: 100%;
+}
 
-#main {
-  margin-top: 20px; }
-  #main #inputs {
-    width: 500px;
-    margin: auto;
-    margin-bottom: 30px;
-    text-align: center; }
-    #main #inputs h1 {
-      margin-bottom: 30px; }
-      #main #inputs h1 .label {
-        font-size: 12px;
-        position: relative;
-        bottom: 16px;
-        font-weight: 400; }
-        #main #inputs h1 .label #order-display {
-          font-weight: 600; }
-    #main #inputs #create-form {
-      display: none; }
-      #main #inputs #create-form input[type=text] {
-        width: 30px;
-        padding: 3px 7px;
-        text-align: right;
-        height: 30px; }
-  #main .node circle {
-    fill: #fff;
-    stroke: steelblue;
-    stroke-width: 3px; }
-  #main .node text {
-    font: 15px sans-serif; }
-  #main .link {
-    fill: none;
-    stroke: #ccc;
-    stroke-width: 2px; }
+#main #inputs {
+  margin-top: 20px;
+  margin-bottom: 30px;  
+  display: flex;
+  justify-content: space-around;
+  align-items: center;  
+}
 
-#popup {
-  width: 400px;
-  height: 350px;
-  display: block;
-  position: fixed;
-  bottom: -350px;
-  right: 0;
-  font-size: 12px;
-  line-height: 1.3em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #fff;
-  transition: 0.2s bottom; }
-  #popup p {
-    margin: 15px 20px; }
+#main #inputs #btree-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+}
 
-.note {
-  display: block;
-  position: fixed;
-  bottom: 2px;
-  right: 6px;
-  text-align: right;
-  font-size: 12px;
-  transition: 0.2s color;
-  z-index: 3; }
-  .note:hover {
-    text-decoration: none; }
+#main #inputs h1 {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
 
-#close-this {
-  display: none; }
+#main #inputs h1 .label {
+  margin: 0px 15px;
+  font-size: 15px;
+  font-weight: 400;
+}
 
-/*# sourceMappingURL=style.css.map */
+#main #inputs .form-inline {
+  margin: 0;
+}
+
+#main #inputs h1 .label #order-display {
+  font-weight: 600;
+}
+
+#main .node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 3px;
+}
+#main .node text {
+  font: 15px sans-serif;
+}
+#main .link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
+

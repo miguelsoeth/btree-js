@@ -12,30 +12,25 @@
 
 
 <body id="main">
-
+  
   <div id="inputs">
-    <h1>B-Tree <span class="label label-info reset-btree">Order <span id="order-display"></span></span></h1>
+    <div id="btree-add">
+      <h1>B-Tree <span class="label label-success">Ordem <span id="order-display"></span></span></h1>
+      <form action="#" id="add-form" class="form-inline">
+        <input type="number" class="form-control" placeholder="Digite um número..." id="input-add"/>
+        <button type="submit" class="btn btn-success">Adicionar</button>
+      </form>
+    </div>
 
-    <form action="#" id="create-form" class="form-inline">
-      <p>
-        Create B-tree of order
-        <input type="text" class="form-control" value="5" id="new-order"/><br/>
-        and seed it with
-        <input type="text" class="form-control" value="5" id="new-seed"/>
-        random numbers.
-      </p>
-      <button type="submit" class="btn btn-primary">Continue &rarr;</button>
-    </form>
-
-    <form action="#" id="add-form" class="form-inline">
-      <div class="form-group">
-        <label for="add"></label>
-        <input type="text" class="form-control" placeholder="Enter an integer..." id="input-add"/>
-      </div>
-      <button type="submit" class="btn btn-primary">Add</button>
-      <a href="#" id="clear-button" class="btn btn-default reset-btree">Reset</a>
-    </form>
-
+    <div class="form-inline">
+      <input type="number" class="form-control" placeholder="Quantidade" value="" id="quantity"/>
+      <button id="clear-button" class="btn btn-default seed-btree">Começar com valores aleatórios</button>
+    </div>
+    
+    <div class="form-inline">
+      <input type="number" class="form-control" placeholder="Digite a ordem..." value="" id="new-order"/>
+      <button id="clear-button" class="btn btn-default reset-btree">Resetar e criar</button>
+    </div>    
   </div>
 
 

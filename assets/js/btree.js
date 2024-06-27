@@ -81,6 +81,8 @@ BTree.prototype.toJSON = function() {
 BTree.prototype.seed = function(count) {
   var list = [];
 
+  BTree.prototype.search
+
   upper = 100;
   if (count > 50) upper = count*2;
 

@@ -21,50 +21,49 @@ $(function() {
   bTree = BTree(5);
   $("#order-display").html(5);
 
-  // create form event handler
-  $("#create-form").submit(function(event) {
-    event.preventDefault();
-    var order = parseInt( $("#new-order").val() );
-    var seed = parseInt( $("#new-seed").val() );
-
-    // set up btree
-    bTree = BTree(order);
-    bTree.seed(seed);
-
-    $("#create-form").fadeOut(200, function() {
-      $("#order-display").html(order);
-      $("h1 .label").fadeIn(200);
-      $("#add-form").fadeIn(200, function() {
-        if (!bTree.isEmpty()) {
-          $("#canvas").fadeIn(200);
-          var treeData = bTree.toJSON();
-          update(treeData);
-        }
-      });
-    });
-
-  });
-
   // reset tree event handler
   $(".reset-btree").click(function(e) {
     e.preventDefault();
+    var order = parseInt( $("#new-order").val() );
+    if (!order) {
+      alert("Entrada inválida!");
+      return
+    }
+
     $("#input-add").val("");
     $('svg g').children().remove();
-    $("#canvas").fadeOut(200);
-    $("h1 .label").fadeOut(200);
-    $("#add-form").fadeOut(200, function(){
-      $("#create-form").fadeIn(200);
-    });
+    $("#order-display").html(order);
+    $(".seed-btree").prop('disabled', false);
+    bTree = BTree(order);
+  });
 
+  // seed tree event handler
+  $(".seed-btree").click(function(e) {
+    e.preventDefault();
+    var quantity = parseInt( $("#quantity").val() );
+    if (!quantity) {
+      alert("Entrada inválida!");
+      return
+    }
+    bTree.seed(quantity);
+    var treeData = bTree.toJSON();
+    update(treeData);
+    $(".seed-btree").prop('disabled', true);
   });
 
   // add integer event handler
   $("#add-form").submit(function(event) {
     event.preventDefault();
     var value = parseInt( $("#input-add").val() );
+    if (!value) {
+      alert("Entrada inválida!");
+      return
+    }
+
     bTree.insert(value, false); // silently insert
 
     $("#input-add").val("");
+    $(".seed-btree").prop('disabled', true);
 
     treeData = bTree.toJSON();
     update(treeData);
