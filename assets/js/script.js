@@ -94,7 +94,7 @@ $(function () {
     $("#order-display").html(order);
     $(".seed-btree").prop("disabled", false);
     $(".seed-btree-input").prop("disabled", false);
-    $(".reset-btree-input").val("");
+    //$(".reset-btree-input").val("");
     bTree = BTree(order);
   });
 
@@ -123,8 +123,12 @@ $(function () {
   // update d3 visualization
   function update(source) {
     // Make source data into d3-usable format
-    var nodes = tree.nodes(source);
+    var nodes = tree.nodes(source);    
     var links = tree.links(nodes);
+
+    // console.log(source)
+    // console.log(nodes)
+    // console.log(links)
 
     // Normalize for fixed-depth.
     nodes.forEach(function (d) {
@@ -195,10 +199,74 @@ $(function () {
     });
     link.enter().insert("path", "g").attr("class", "link").attr("d", diagonal);
 
+    var positions = getInOrder();
+    
+    function getInOrder() {
+      var tempPositions = [];
+      link.each(function (d, i) {
+        var thisLink = d3.select(svg.selectAll("path.link")[0][i]);
+        var origin = thisLink[0][0].__data__.target.parent.x;
+        var x = thisLink[0][0].__data__.target.x;
+  
+        if (x < origin) {
+          tempPositions.push({pos: x, side: "L"})
+        }
+        else if ( x > origin) {
+          tempPositions.push({pos: x, side: "R"})
+        }
+        else {
+          tempPositions.push({pos: x, side: "M"})
+        } 
+      });
+  
+  
+      var leftNodes = tempPositions.filter(function(d) { return d.side === "L"; });
+      leftNodes.sort(function(a, b) { return a.pos - b.pos; });
+      assignOrder(leftNodes, 'L');
+  
+      // Sort nodes in 'R' category
+      var rightNodes = tempPositions.filter(function(d) { return d.side === "R"; });
+      rightNodes.sort(function(a, b) { return b.pos - a.pos; });
+      assignOrder(rightNodes, 'R');
+  
+      // Sort nodes in 'M' category (if needed)
+      var middleNodes = tempPositions.filter(function(d) { return d.side === "M"; });
+      middleNodes.sort(function(a, b) { return Math.abs(a.pos) - Math.abs(b.pos); });
+      assignOrder(middleNodes, 'M');
+  
+      // Combine sorted nodes with their relative position order
+      var sortedPositions = leftNodes.concat(middleNodes).concat(rightNodes);
+  
+      return(sortedPositions);
+  
+      function assignOrder(nodes, side) {
+        var totalNodes = nodes.length;
+        nodes.forEach(function(d, i) {
+            d.order = totalNodes - i; // Highest order for the last node, lowest for the first
+            d.side = side;
+        });
+      }
+    }    
+
     link.each(function (d, i) {
       var thisLink = d3.select(svg.selectAll("path.link")[0][i]);
+      var xPos = thisLink[0][0].__data__.target.x;
+      var foundItem = positions.find(function(item) {
+          return item.pos === xPos;
+      });
+
+      console.log(thisLink);
+
       diagonal = d3.svg.diagonal().projection(function (d) {
-        return [d.x, d.y];
+        if (foundItem.side === 'L') {
+          return [d.x - (15*foundItem.order), d.y];
+        }
+        else if (foundItem.side === 'R') {
+          return [d.x + (15*foundItem.order), d.y];
+        }
+        else {          
+          return [d.x, d.y];
+        }        
       });
       thisLink.transition().attr("d", diagonal);
     });
