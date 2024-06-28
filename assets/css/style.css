@@ -17,6 +17,9 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;  
+  border: 1px solid green;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 #main #inputs h1 {
@@ -41,7 +44,7 @@ html {
 
 #main .node circle {
   fill: #fff;
-  stroke: steelblue;
+  stroke: green;
   stroke-width: 3px;
 }
 #main .node text {
