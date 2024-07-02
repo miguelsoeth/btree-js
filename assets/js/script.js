@@ -84,7 +84,7 @@ $(function () {
   $(".reset-btree").click(function (e) {
     e.preventDefault();
     var order = parseInt($("#new-order").val());
-    if (!order || order <= 0) {
+    if (!order || order < 3) {
       alert("Entrada inválida!");
       return;
     }
@@ -125,6 +125,9 @@ $(function () {
     // Make source data into d3-usable format
     var nodes = tree.nodes(source);
     var links = tree.links(nodes);
+    // console.log(links);
+    // links[0].source.x -= 50;
+    // console.log(links[0]);
 
     // Normalize for fixed-depth.
     nodes.forEach(function (d) {
