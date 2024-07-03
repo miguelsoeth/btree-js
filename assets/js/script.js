@@ -116,6 +116,46 @@ $(function () {
     update(treeData);
   });
 
+  // search item from tree event handler
+  $(".search-btree").click(function (e) {
+    e.preventDefault();
+    var num = parseInt($("#input-add").val());
+    if (!num || num <= 0) {
+      alert("Entrada inválida!");
+      return;
+    }
+    $("#input-add").val("");
+  
+    var bTreeNode = bTree.search(num, true);
+    if (!bTreeNode) {
+      alert("Não encontrado!");
+      return;
+    }
+  
+    // Make the current add node highlighted in red
+    $("g text").each(function (index) {
+      var d3NodeTouched = d3.selectAll("g.node").filter(function (d) {
+        return d.name === bTreeNode.keys.toString();
+      });
+  
+      // Reset all links and nodes
+      d3.selectAll("g.node")
+        .select("circle")
+        .style("stroke", "#ccc")
+        .style("fill", "#ffffff");
+      d3.selectAll(".link").style("stroke", "#ccc");
+  
+      // Color links and all intermediate nodes
+      colorPath(bTreeNode);
+  
+      // Color bottom node
+      d3NodeTouched
+        .select("circle")
+        .style("stroke", "green")
+        .style("fill", "lightgreen");
+    });
+  });
+
   // color paths down to newly added node
   function colorPath(node) {
     // color the node itself

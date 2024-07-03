@@ -38,6 +38,10 @@ html {
   margin: 0;
 }
 
+.form-control {
+  width: 160px !important;
+}
+
 #main #inputs h1 .label #order-display {
   font-weight: 600;
 }
