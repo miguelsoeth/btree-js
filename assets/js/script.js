@@ -108,7 +108,12 @@ $(function () {
       return;
     }
 
-    bTree.delete(num);
+    var deletado = bTree.delete(num)
+
+    if (!deletado) {
+      return
+    }
+    
 
     $("#input-add").val("");
     $("svg g").children().remove();
