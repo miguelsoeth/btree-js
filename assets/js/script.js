@@ -1,9 +1,10 @@
 $(function () {
   // get tree size
   var bodyRect = d3.select("body").node().getBoundingClientRect();
-  var margin = { top: 40, right: 120, bottom: 20, left: 120 },
-    width = bodyRect.width - margin.right - margin.left,
-    height = bodyRect.height - margin.top - margin.bottom;
+  var margin = { top: 40, right: 120, bottom: 20, left: 120 }
+
+  var width = bodyRect.width - margin.right - margin.left - 17
+  var height = bodyRect.height - margin.top - margin.bottom
 
   // create the tree
   var tree = d3.layout.tree().size([width, height]);
@@ -96,6 +97,23 @@ $(function () {
     $(".seed-btree-input").prop("disabled", false);
     $(".reset-btree-input").val("");
     bTree = BTree(order);
+  });
+
+  // delete item from tree event handler
+  $(".delete-btree").click(function (e) {
+    e.preventDefault();
+    var num = parseInt($("#input-add").val());
+    if (!num || num <= 0) {
+      alert("Entrada inválida!");
+      return;
+    }
+
+    bTree.delete(num);
+
+    $("#input-add").val("");
+    $("svg g").children().remove();
+    treeData = bTree.toJSON();
+    update(treeData);
   });
 
   // color paths down to newly added node

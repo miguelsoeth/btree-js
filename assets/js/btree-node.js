@@ -174,3 +174,134 @@ BTreeNode.prototype.toJSON = function() {
     }
     return json;
 }
+
+
+//Delete functions
+BTreeNode.prototype.delete = function(value) {
+  var nodeToDelete = this.traverse(value, true);
+  if (!nodeToDelete) return false; // Value not found
+
+  var index = nodeToDelete.keys.indexOf(value);
+  if (index === -1) return false; // Value not found in keys
+
+  // If the node is a leaf, simply remove the key
+  if (nodeToDelete.isLeaf()) {
+    nodeToDelete.keys.splice(index, 1);
+  } else {
+    // If the node is an internal node, replace the key with the predecessor or successor
+    var predecessorNode = nodeToDelete.children[index];
+    while (!predecessorNode.isLeaf()) {
+      predecessorNode = predecessorNode.children[predecessorNode.children.length - 1];
+    }
+    var predecessorKey = predecessorNode.keys.pop();
+    nodeToDelete.keys[index] = predecessorKey;
+
+    // Handle underflow in the predecessor node
+    if (predecessorNode.keys.length < Math.ceil(this.tree.order / 2) - 1) {
+      this.handleUnderflow(predecessorNode);
+    }
+  }
+
+  // Handle underflow if necessary
+  if (nodeToDelete.keys.length < Math.ceil(this.tree.order / 2) - 1 && !nodeToDelete.isRoot()) {
+    this.handleUnderflow(nodeToDelete);
+  }
+
+  return true; // Successfully deleted
+}
+
+BTreeNode.prototype.handleUnderflow = function(node) {
+  var parent = node.parent;
+
+  var siblingIndex = parent.children.indexOf(node);
+  var leftSibling = siblingIndex > 0 ? parent.children[siblingIndex - 1] : null;
+  var rightSibling = siblingIndex < parent.children.length - 1 ? parent.children[siblingIndex + 1] : null;
+
+  if (leftSibling && leftSibling.keys.length > Math.ceil(this.tree.order / 2) - 1) {
+    this.borrowFromLeftSibling(parent, siblingIndex);
+  } else if (rightSibling && rightSibling.keys.length > Math.ceil(this.tree.order / 2) - 1) {
+    this.borrowFromRightSibling(parent, siblingIndex);
+  } else if (leftSibling) {
+    this.mergeWithLeftSibling(parent, siblingIndex);
+  } else if (rightSibling) {
+    this.mergeWithRightSibling(parent, siblingIndex);
+  }
+
+  if (parent.keys.length < Math.ceil(this.tree.order / 2) - 1 && !parent.isRoot()) {
+    this.handleUnderflow(parent);
+  }
+}
+
+BTreeNode.prototype.borrowFromLeftSibling = function(parent, siblingIndex) {
+  var leftSibling = parent.children[siblingIndex - 1];
+  var node = parent.children[siblingIndex];
+
+  node.keys.unshift(parent.keys[siblingIndex - 1]);
+  parent.keys[siblingIndex - 1] = leftSibling.keys.pop();
+
+  if (!leftSibling.isLeaf()) {
+    node.children.unshift(leftSibling.children.pop());
+    node.children[0].parent = node;
+  }
+}
+
+BTreeNode.prototype.borrowFromRightSibling = function(parent, siblingIndex) {
+  var rightSibling = parent.children[siblingIndex + 1];
+  var node = parent.children[siblingIndex];
+
+  node.keys.push(parent.keys[siblingIndex]);
+  parent.keys[siblingIndex] = rightSibling.keys.shift();
+
+  if (!rightSibling.isLeaf()) {
+    node.children.push(rightSibling.children.shift());
+    node.children[node.children.length - 1].parent = node;
+  }
+}
+
+BTreeNode.prototype.mergeWithLeftSibling = function(parent, siblingIndex) {
+  var leftSibling = parent.children[siblingIndex - 1];
+  var node = parent.children[siblingIndex];
+
+  leftSibling.keys.push(parent.keys[siblingIndex - 1]);
+  leftSibling.keys = leftSibling.keys.concat(node.keys);
+
+  if (!node.isLeaf()) {
+    leftSibling.children = leftSibling.children.concat(node.children);
+    node.children.forEach(child => {
+      child.parent = leftSibling;
+    });
+  }
+
+  parent.keys.splice(siblingIndex - 1, 1);
+  parent.children.splice(siblingIndex, 1);
+
+  // If the parent is the root and now has no keys, make the leftSibling the new root
+  if (parent.isRoot() && parent.keys.length === 0) {
+    this.tree.root = leftSibling;
+    leftSibling.parent = null;
+  }
+}
+
+BTreeNode.prototype.mergeWithRightSibling = function(parent, siblingIndex) {
+  var rightSibling = parent.children[siblingIndex + 1];
+  var node = parent.children[siblingIndex];
+
+  node.keys.push(parent.keys[siblingIndex]);
+  node.keys = node.keys.concat(rightSibling.keys);
+
+  if (!rightSibling.isLeaf()) {
+    node.children = node.children.concat(rightSibling.children);
+    rightSibling.children.forEach(child => {
+      child.parent = node;
+    });
+  }
+
+  parent.keys.splice(siblingIndex, 1);
+  parent.children.splice(siblingIndex + 1, 1);
+
+  // If the parent is the root and now has no keys, make the node the new root
+  if (parent.isRoot() && parent.keys.length === 0) {
+    this.tree.root = node;
+    node.parent = null;
+  }
+}

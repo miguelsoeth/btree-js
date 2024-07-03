@@ -73,7 +73,7 @@ BTree.prototype.removeUnattached = function(node, level) {
 // Generate tree json for d3.js to consume
 BTree.prototype.toJSON = function() {
   root = this.root;
-  console.log("JSON BTREE: ", root.toJSON())
+  //console.log("JSON BTREE: ", root.toJSON())
   return root.toJSON();
 }
 
@@ -98,4 +98,27 @@ BTree.prototype.seed = function(count) {
 
 BTree.prototype.isEmpty = function() {
   return !this.root;
+}
+
+//Delete functions
+BTree.prototype.delete = function(value) {
+  if (!this.root) {
+    alert("Arvore vazia!");
+    return false; // Tree is empty
+  }
+
+  if (!this.search(value, true)) {
+    alert("O valor "+value+" nao existe!");
+    return false;
+  }
+
+  var deleted = this.root.delete(value);
+
+  // If root became empty due to deletion, set root to null or its single child
+  if (this.root.keys.length === 0) {
+    this.root = this.root.isLeaf() ? null : this.root.children[0];
+    if (this.root) this.root.parent = null; // Update new root's parent pointer
+  }
+
+  return deleted;
 }
